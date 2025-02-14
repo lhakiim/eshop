@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.Iterator;
 
@@ -64,5 +63,65 @@ class ProductRepositoryTest {
         savedProduct = productIterator.next();
         assertEquals(product2.getProductId(), savedProduct.getProductId());
         assertFalse(productIterator.hasNext());
+    }
+
+    @Test
+    void testEditProduct(){
+        Product product = new Product();
+        product.setProductId("ab55e9f-1c39-460e-8860-71aaf6af63bd6");
+        product.setProductName("Sampo Limbad");
+        product.setProductQuantity(5);
+        productRepository.create(product);
+
+        Product updatedProduct = new Product();
+        updatedProduct.setProductId("ab55e9f-1c39-460e-8860-71aaf6af63bd6");
+        updatedProduct.setProductName("Sabun Limbad");
+        updatedProduct.setProductQuantity(10);
+        productRepository.update(updatedProduct);
+
+        Product result = productRepository.findById("ab55e9f-1c39-460e-8860-71aaf6af63bd6");
+        assertNotNull(result);
+        assertEquals("Sabun Limbad", result.getProductName());
+        assertEquals(10, result.getProductQuantity());
+        assertEquals("ab55e9f-1c39-460e-8860-71aaf6af63bd6", result.getProductId());
+    }
+
+    @Test
+    void testEditNullProduct() {
+        //
+        Product nullProduct = new Product();
+        nullProduct.setProductId("null-object");
+        nullProduct.setProductName("None");
+        nullProduct.setProductQuantity(122);
+        productRepository.update(nullProduct);
+
+        assertNull(productRepository.findById("null-object"));
+    }
+
+    @Test
+    void testDeleteProduct(){
+
+        Product product = new Product();
+        product.setProductId("ab55e9f-1c39-460e-8860-71aaf6af63bd6");
+        product.setProductName("Pintu kemana saja");
+        product.setProductQuantity(88);
+        productRepository.create(product);
+
+        Iterator<Product> productIterator = productRepository.findAll();
+        assertTrue(productIterator.hasNext());
+        productRepository.delete("ab55e9f-1c39-460e-8860-71aaf6af63bd6");
+
+        productIterator = productRepository.findAll();
+        assertFalse(productIterator.hasNext());
+    }
+
+    @Test
+    void testNullDeleteProduct(){
+
+        Product nullProduct = new Product();
+        nullProduct.setProductId("nullID");
+        productRepository.delete("nullID");
+
+        assertNull(productRepository.findById("nullID"));
     }
 }
