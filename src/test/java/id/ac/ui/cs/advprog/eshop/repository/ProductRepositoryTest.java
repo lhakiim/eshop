@@ -141,6 +141,11 @@ class ProductRepositoryTest {
 
     @Test
     void testDeleteWithNullId() {
-        productRepository.delete(null);
+        Product product = new Product();
+        product.setProductName("Bambang");
+
+        productRepository.delete("qqq");
+        Iterator<Product> it = productRepository.findAll();
+        assertFalse(it.hasNext());
     }
 }
