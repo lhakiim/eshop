@@ -9,6 +9,8 @@ class EshopApplicationTests {
 
     @Test
     void contextLoads() {
+        // Metode ini digunakan untuk menguji apakah konteks aplikasi Spring Boot dapat dimuat dengan benar.
+        // Jika konteks gagal dimuat, maka pengujian ini akan gagal.
     }
 
     @Test
