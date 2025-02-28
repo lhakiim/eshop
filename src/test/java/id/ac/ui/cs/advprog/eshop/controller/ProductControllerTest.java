@@ -30,12 +30,6 @@ class ProductControllerTest {
     @MockitoBean
     ProductService productService;
 
-    @MockitoBean
-    private CarController carController;
-
-    @MockitoBean
-    private CarService carService;
-
     private Product testProduct1;
     private Product testProduct2;
 
