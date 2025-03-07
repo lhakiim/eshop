@@ -24,7 +24,7 @@ public class PaymentTest {
         product1.setProductQuantity(2);
         products.add(product1);
 
-        this.order = newOrder("13652556-012a-4c07-b546-54eb1396d79b",
+        this.order = new Order("13652556-012a-4c07-b546-54eb1396d79b",
                 products, 1708560000L, "Safira Sudrajat");
 
         this.paymentData = new HashMap<String, String>();
@@ -46,7 +46,7 @@ public class PaymentTest {
         Payment payment1 = new Payment("id-payment1", this.order, "CASH_ON_DELIVERY", this.paymentData, "SUCCESS");
         Payment payment2 = new Payment("id-payment2", this.order, "CASH_ON_DELIVERY", this.paymentData, "REJECTED");
         assertEquals("SUCCESS", payment1.getStatus());
-        assertEquals("SUCCESS", payment2.getStatus());
+        assertEquals("REJECTED", payment2.getStatus());
     }
 
     @Test
@@ -58,8 +58,8 @@ public class PaymentTest {
 
     @Test
     void testPaymentWithValidVoucher() {
-        this.paymentData.put("voucherCode", "“ESHOP1234ABC5678");
-        Payment payment = new Payment("id-payment1", this.order, "CASH_ON_DELIVERY", this.paymentData);
+        this.paymentData.put("voucherCode", "ESHOP12345678ZZZ");
+        Payment payment = new Payment("id-payment1", this.order, "VOUCHER", this.paymentData);
         payment.verifyAndSetStatus();
         assertEquals("SUCCESS", payment.getStatus());
     }
@@ -67,7 +67,7 @@ public class PaymentTest {
     @Test
     void testPaymentWithInvalidVoucher_Length() {
         paymentData.put("voucherCode", "ESHOP123ABC567");
-        Payment payment = new Payment("id-payment1", this.order, "CASH_ON_DELIVERY", this.paymentData);
+        Payment payment = new Payment("id-payment1", this.order, "VOUCHER", this.paymentData);
         payment.verifyAndSetStatus();
         assertEquals("REJECTED", payment.getStatus());
     }
@@ -75,7 +75,7 @@ public class PaymentTest {
     @Test
     void testPaymentWithInvalidVoucher_NumberCount() {
         paymentData.put("voucherCode", "ESHOP12ABCD567E");
-        Payment payment = new Payment("id-payment1", this.order, "CASH_ON_DELIVERY", this.paymentData);
+        Payment payment = new Payment("id-payment1", this.order, "VOUCHER", this.paymentData);
         payment.verifyAndSetStatus();
         assertEquals("REJECTED", payment.getStatus());
     }
@@ -83,7 +83,7 @@ public class PaymentTest {
     @Test
     void testPaymentWithInvalidVoucher_Prefix() {
         paymentData.put("voucherCode", "SHOPEE4ABC567800");
-        Payment payment = new Payment("id-payment1", this.order, "CASH_ON_DELIVERY", this.paymentData);
+        Payment payment = new Payment("id-payment1", this.order, "VOUCHER", this.paymentData);
         payment.verifyAndSetStatus();
         assertEquals("REJECTED", payment.getStatus());
     }
@@ -91,7 +91,7 @@ public class PaymentTest {
     @Test
     void testPaymentWithInvalidVoucher_Empty() {
         paymentData.put("voucherCode", "");
-        Payment payment = new Payment("id-payment1", this.order, "CASH_ON_DELIVERY", this.paymentData);
+        Payment payment = new Payment("id-payment1", this.order, "VOUCHER", this.paymentData);
         payment.verifyAndSetStatus();
         assertEquals("REJECTED", payment.getStatus());
     }
