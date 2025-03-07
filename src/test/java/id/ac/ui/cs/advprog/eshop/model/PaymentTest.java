@@ -1,5 +1,7 @@
 package id.ac.ui.cs.advprog.eshop.model;
 
+import id.ac.ui.cs.advprog.eshop.enums.PaymentMethod;
+import id.ac.ui.cs.advprog.eshop.enums.PaymentStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -36,24 +38,24 @@ public class PaymentTest {
 
         assertEquals("id-payment1", payment.getId());
         assertEquals(this.order, payment.getOrder());
-        assertEquals("CASH_ON_DELIVERY", payment.getMethod());
+        assertEquals(PaymentMethod.CASH_ON_DELIVERY.getValue(), payment.getMethod());
         assertEquals(this.paymentData, payment.getPaymentData());
-        assertEquals("PENDING PAYMENT", payment.getStatus());
+        assertEquals(PaymentStatus.PENDING.getValue(), payment.getStatus());
     }
 
     @Test
     void testCreatePaymentWithStatus() {
         Payment payment1 = new Payment("id-payment1", this.order, "CASH_ON_DELIVERY", this.paymentData, "SUCCESS");
         Payment payment2 = new Payment("id-payment2", this.order, "CASH_ON_DELIVERY", this.paymentData, "REJECTED");
-        assertEquals("SUCCESS", payment1.getStatus());
-        assertEquals("REJECTED", payment2.getStatus());
+        assertEquals(PaymentStatus.SUCCESS.getValue(), payment1.getStatus());
+        assertEquals(PaymentStatus.REJECTED.getValue(), payment2.getStatus());
     }
 
     @Test
     void testSetPaymentStatus() {
         Payment payment = new Payment("id-payment1", this.order, "CASH_ON_DELIVERY", this.paymentData);
-        payment.setStatus("SUCCESS");
-        assertEquals("SUCCESS", payment.getStatus());
+        payment.setStatus(PaymentStatus.SUCCESS.getValue());
+        assertEquals(PaymentStatus.SUCCESS.getValue(), payment.getStatus());
     }
 
     @Test
@@ -61,7 +63,7 @@ public class PaymentTest {
         this.paymentData.put("voucherCode", "ESHOP12345678ZZZ");
         Payment payment = new Payment("id-payment1", this.order, "VOUCHER", this.paymentData);
         payment.verifyAndSetStatus();
-        assertEquals("SUCCESS", payment.getStatus());
+        assertEquals(PaymentStatus.SUCCESS.getValue(), payment.getStatus());
     }
 
     @Test
@@ -69,7 +71,7 @@ public class PaymentTest {
         paymentData.put("voucherCode", "ESHOP123ABC567");
         Payment payment = new Payment("id-payment1", this.order, "VOUCHER", this.paymentData);
         payment.verifyAndSetStatus();
-        assertEquals("REJECTED", payment.getStatus());
+        assertEquals(PaymentStatus.REJECTED.getValue(), payment.getStatus());
     }
 
     @Test
@@ -77,7 +79,7 @@ public class PaymentTest {
         paymentData.put("voucherCode", "ESHOP12ABCD567E");
         Payment payment = new Payment("id-payment1", this.order, "VOUCHER", this.paymentData);
         payment.verifyAndSetStatus();
-        assertEquals("REJECTED", payment.getStatus());
+        assertEquals(PaymentStatus.REJECTED.getValue(), payment.getStatus());
     }
 
     @Test
@@ -85,7 +87,7 @@ public class PaymentTest {
         paymentData.put("voucherCode", "SHOPEE4ABC567800");
         Payment payment = new Payment("id-payment1", this.order, "VOUCHER", this.paymentData);
         payment.verifyAndSetStatus();
-        assertEquals("REJECTED", payment.getStatus());
+        assertEquals(PaymentStatus.REJECTED.getValue(), payment.getStatus());
     }
 
     @Test
@@ -93,7 +95,7 @@ public class PaymentTest {
         paymentData.put("voucherCode", "");
         Payment payment = new Payment("id-payment1", this.order, "VOUCHER", this.paymentData);
         payment.verifyAndSetStatus();
-        assertEquals("REJECTED", payment.getStatus());
+        assertEquals(PaymentStatus.REJECTED.getValue(), payment.getStatus());
     }
 
     @Test
@@ -102,7 +104,7 @@ public class PaymentTest {
         this.paymentData.put("deliveryFee", "10000");
         Payment payment = new Payment("id-payment1", this.order, "CASH_ON_DELIVERY", this.paymentData);
         payment.verifyAndSetStatus();
-        assertEquals("SUCCESS", payment.getStatus());
+        assertEquals(PaymentStatus.SUCCESS.getValue(), payment.getStatus());
     }
 
     @Test
@@ -111,7 +113,7 @@ public class PaymentTest {
         this.paymentData.put("deliveryFee", "10000");
         Payment payment = new Payment("id-payment1", this.order, "CASH_ON_DELIVERY", this.paymentData);
         payment.verifyAndSetStatus();
-        assertEquals("REJECTED", payment.getStatus());
+        assertEquals(PaymentStatus.REJECTED.getValue(), payment.getStatus());
     }
 
     @Test
@@ -120,7 +122,7 @@ public class PaymentTest {
         this.paymentData.put("deliveryFee", "");
         Payment payment = new Payment("id-payment1", this.order, "CASH_ON_DELIVERY", this.paymentData);
         payment.verifyAndSetStatus();
-        assertEquals("REJECTED", payment.getStatus());
+        assertEquals(PaymentStatus.REJECTED.getValue(), payment.getStatus());
     }
 
     @Test
