@@ -25,7 +25,7 @@ public class PaymentTest {
         products.add(product1);
 
         this.order = newOrder("13652556-012a-4c07-b546-54eb1396d79b",
-                this.products, 1708560000L, "Safira Sudrajat");
+                products, 1708560000L, "Safira Sudrajat");
 
         this.paymentData = new HashMap<String, String>();
     }
@@ -45,7 +45,8 @@ public class PaymentTest {
     void testCreatePaymentWithStatus() {
         Payment payment1 = new Payment("id-payment1", this.order, "CASH_ON_DELIVERY", this.paymentData, "SUCCESS");
         Payment payment2 = new Payment("id-payment2", this.order, "CASH_ON_DELIVERY", this.paymentData, "REJECTED");
-        assertEquals("SUCCESS", payment.getStatus());
+        assertEquals("SUCCESS", payment1.getStatus());
+        assertEquals("SUCCESS", payment2.getStatus());
     }
 
     @Test
@@ -101,7 +102,7 @@ public class PaymentTest {
         this.paymentData.put("deliveryFee", "10000");
         Payment payment = new Payment("id-payment1", this.order, "CASH_ON_DELIVERY", this.paymentData);
         payment.verifyAndSetStatus();
-        assertEquals("SUCCESS", this.payment.getStatus());
+        assertEquals("SUCCESS", payment.getStatus());
     }
 
     @Test
@@ -110,7 +111,7 @@ public class PaymentTest {
         this.paymentData.put("deliveryFee", "10000");
         Payment payment = new Payment("id-payment1", this.order, "CASH_ON_DELIVERY", this.paymentData);
         payment.verifyAndSetStatus();
-        assertEquals("REJECTED", this.payment.getStatus());
+        assertEquals("REJECTED", payment.getStatus());
     }
 
     @Test
@@ -119,14 +120,14 @@ public class PaymentTest {
         this.paymentData.put("deliveryFee", "");
         Payment payment = new Payment("id-payment1", this.order, "CASH_ON_DELIVERY", this.paymentData);
         payment.verifyAndSetStatus();
-        assertEquals("REJECTED", this.payment.getStatus());
+        assertEquals("REJECTED", payment.getStatus());
     }
 
     @Test
     void testInvalidPaymentMethod() {
         Payment payment = new Payment("id-payment1", this.order, "INVALID_METHOD", this.paymentData);
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            payment.validateAndSetStatus();
+            payment.verifyAndSetStatus();
         });
         assertTrue(exception.getMessage().contains("Invalid payment method"));
     }
