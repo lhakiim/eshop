@@ -74,6 +74,8 @@ public class PaymentRepositoryTest {
         payment1.setStatus(PaymentStatus.SUCCESS.getValue());
         repository.save(payment1);
 
+        Payment updated = repository.findById("id-payment1");
+
         assertEquals(PaymentStatus.SUCCESS.getValue(), updated.getStatus());
     }
 
