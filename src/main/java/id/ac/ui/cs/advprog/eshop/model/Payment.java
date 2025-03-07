@@ -1,6 +1,7 @@
 package id.ac.ui.cs.advprog.eshop.model;
 
-import lombok.Builder;
+import id.ac.ui.cs.advprog.eshop.enums.PaymentMethod;
+import id.ac.ui.cs.advprog.eshop.enums.PaymentStatus;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,7 +22,7 @@ public class Payment {
         this.order = order;
         this.method = method;
         this.paymentData = paymentData;
-        this.status = "PENDING PAYMENT";
+        this.status = PaymentStatus.PENDING.getValue();
     }
 
     public Payment(String id, Order order, String method, Map<String, String> paymentData, String status) {
@@ -30,9 +31,9 @@ public class Payment {
     }
 
     public void verifyAndSetStatus() {
-        if ("VOUCHER".equalsIgnoreCase(method)) {
+        if (PaymentMethod.VOUCHER.getValue().equalsIgnoreCase(method)) {
             verifyVoucherPayment();
-        } else if ("CASH_ON_DELIVERY".equalsIgnoreCase(method)) {
+        } else if (PaymentMethod.CASH_ON_DELIVERY.getValue().equalsIgnoreCase(method)) {
             verifyCashOnDeliveryPayment();
         } else {
             throw new IllegalArgumentException("Invalid payment method: " + method);
@@ -42,12 +43,13 @@ public class Payment {
     private void verifyVoucherPayment() {
         String voucherCode = paymentData.get("voucherCode");
         if (voucherCode == null || voucherCode.length() != 16 || !voucherCode.startsWith("ESHOP")) {
-            setStatus("REJECTED");
+            setStatus(PaymentStatus.REJECTED.getValue());
             return;
         }
 
         long digitCount = voucherCode.chars().filter(Character::isDigit).count();
-        setStatus(digitCount == 8 ? "SUCCESS" : "REJECTED");
+        setStatus(digitCount == 8 ? PaymentStatus.SUCCESS.getValue() :
+                PaymentStatus.REJECTED.getValue());
     }
 
     private void verifyCashOnDeliveryPayment() {
@@ -57,6 +59,6 @@ public class Payment {
         boolean isInvalid = address == null || address.trim().isEmpty()
                 || deliveryFee == null || deliveryFee.trim().isEmpty();
 
-        setStatus(isInvalid ? "REJECTED" : "SUCCESS");
+        setStatus(isInvalid ? PaymentStatus.REJECTED.getValue() : PaymentStatus.SUCCESS.getValue());
     }
 }
